@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameWorks", "FrameWorks\FrameWorks.csproj", "{7B193856-5513-4EFB-A9D6-BB0434A69F83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLPayment", "RLPayment\RLPayment.csproj", "{AE575B05-5E15-4C1A-A829-644F5971E4EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B193856-5513-4EFB-A9D6-BB0434A69F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B193856-5513-4EFB-A9D6-BB0434A69F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B193856-5513-4EFB-A9D6-BB0434A69F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B193856-5513-4EFB-A9D6-BB0434A69F83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE575B05-5E15-4C1A-A829-644F5971E4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE575B05-5E15-4C1A-A829-644F5971E4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE575B05-5E15-4C1A-A829-644F5971E4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE575B05-5E15-4C1A-A829-644F5971E4EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

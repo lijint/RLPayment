@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7B193856-5513-4EFB-A9D6-BB0434A69F83}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Landi.FrameWorks</RootNamespace>
+    <AssemblyName>FrameWorks</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdFormBase.Designer.cs">
+      <DependentUpon>AdFormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\CopyDirectory.cs" />
+    <Compile Include="Common\DBClass\DataAccess.cs" />
+    <Compile Include="Common\DBClass\DataAccessInterface.cs" />
+    <Compile Include="Common\DBClass\Entry.cs" />
+    <Compile Include="Common\DllImport.cs" />
+    <Compile Include="Common\Encrypt.cs" />
+    <Compile Include="Common\EventHandler\EventHandlerWrapper.cs" />
+    <Compile Include="Common\EventHandler\HtmlElementEventHandlerWrapper.cs" />
+    <Compile Include="Common\HttpHelper.cs" />
+    <Compile Include="Common\INIClass.cs" />
+    <Compile Include="Common\RasManager.cs" />
+    <Compile Include="Common\RegHandler.cs" />
+    <Compile Include="Common\StreamByte.cs" />
+    <Compile Include="Common\TLVHandler.cs" />
+    <Compile Include="Common\Utility.cs" />
+    <Compile Include="Common\WindowsController.cs" />
+    <Compile Include="Common\XmlClass.cs" />
+    <Compile Include="Frameworks\Activity.cs" />
+    <Compile Include="Frameworks\ActivityHandler.cs" />
+    <Compile Include="Frameworks\ActivityManager.cs" />
+    <Compile Include="Frameworks\ActivityManagerHandler.cs" />
+    <Compile Include="Frameworks\AdManager.cs" />
+    <Compile Include="Frameworks\BaseEntity.cs" />
+    <Compile Include="Frameworks\Bundle.cs" />
+    <Compile Include="Frameworks\BusinessStratagy.cs" />
+    <Compile Include="Frameworks\CommonData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Frameworks\CustomActivity\MessageActivity.cs" />
+    <Compile Include="Frameworks\CustomActivity\MultiTableActivity.cs" />
+    <Compile Include="Frameworks\CustomActivity\SingleTableActivity.cs" />
+    <Compile Include="Frameworks\ConfigFile.cs" />
+    <Compile Include="Frameworks\FrameActivity.cs" />
+    <Compile Include="Frameworks\Intent.cs" />
+    <Compile Include="Frameworks\ITimeTick.cs" />
+    <Compile Include="Frameworks\Log.cs" />
+    <Compile Include="Frameworks\Singleton.cs" />
+    <Compile Include="Frameworks\TimerController.cs" />
+    <Compile Include="AppLog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Looper\Handler.cs" />
+    <Compile Include="Looper\HandlerThread.cs" />
+    <Compile Include="Looper\IHandleMessage.cs" />
+    <Compile Include="Looper\Looper.cs" />
+    <Compile Include="Looper\Message.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Looper\MessageQueue.cs" />
+    <Compile Include="MediaAdForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MediaAdForm.Designer.cs">
+      <DependentUpon>MediaAdForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PictureAdForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureAdForm.Designer.cs">
+      <DependentUpon>PictureAdForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AdFormBase.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AdFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaAdForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MediaAdForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PictureAdForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PictureAdForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
