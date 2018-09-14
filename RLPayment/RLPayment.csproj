@@ -92,11 +92,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\EjectCardDeal.cs" />
     <Compile Include="Business\InitializeDeal.cs" />
     <Compile Include="Business\MainPageDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingProcessDeal.cs" />
     <Compile Include="Business\RLCZ\BeingQueryDeal.cs" />
     <Compile Include="Business\RLCZ\CommonErrorDeal.cs" />
+    <Compile Include="Business\RLCZ\CommonSuccessDeal.cs" />
+    <Compile Include="Business\RLCZ\InputPasswordDeal.cs" />
     <Compile Include="Business\RLCZ\InputRLCardNoDeal.cs" />
+    <Compile Include="Business\RLCZ\InsertBankCardDeal.cs" />
+    <Compile Include="Business\RLCZ\QueryInfoDeal.cs" />
     <Compile Include="Business\RLCZ\RLCZStratagy.cs" />
     <Compile Include="Entity\RLCZEntity.cs" />
     <Compile Include="Global.cs" />

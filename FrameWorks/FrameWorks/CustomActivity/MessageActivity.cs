@@ -16,6 +16,7 @@ namespace Landi.FrameWorks
 
         protected sealed override void OnEnter()
         {
+            base.OnEnter();
             if (MyIntent.GetExtra(MESSAGE) != null)
                 mMessage = MyIntent.GetExtra(MESSAGE);
             if (mMessage == null)

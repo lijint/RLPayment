@@ -1,7 +1,8 @@
 using Landi.FrameWorks;
-using Landi.FrameWorks.HardWare;
+using System;
+using TerminalLib;
 
-namespace YAPayment.Business
+namespace RLPayment.Business
 {
     class EjectCardDeal : Activity, ITimeTick
     {
@@ -9,7 +10,6 @@ namespace YAPayment.Business
         protected override void OnEnter()
         {
             mUserTakeCard = false;
-            CardReader.CardOut();
             PostAsync(OnResult);
         }
 
@@ -19,7 +19,6 @@ namespace YAPayment.Business
             {
                 if (TimeIsOut)
                 {
-                    CardReader.CardCapture();
                     Log.Warn("TakeCard TimeOut Capture Card.");
                     break;
                 }
@@ -32,18 +31,39 @@ namespace YAPayment.Business
         {
         }
 
+        private void EjectCard()
+        {
+            //RequestData _request = new RequestData();
+            //terminalPay.BusinessLib = String.Format("{0}.CardReaderService", bankCardLibName);
+            //terminalPay.EjectCard(_request);
+
+            //ResponseData ResponseEntity = terminalPay.ResponseEntity;
+            //string strHtml = ResponseEntity.args;
+            //if (ResponseEntity.StepCode == "ProceduresEnd")
+            //{
+            //    if (ResponseEntity.returnCode == "00")
+            //    {
+            //        strHtml = "ÒÑÍË¿¨";
+            //    }
+            //    else
+            //    {
+            //        strHtml = "ÍË¿¨Ê§°Ü";
+            //    }
+            //    ShowAppMessage(strHtml);
+            //}
+        }
+
         #region ITimeTick ³ÉÔ±
 
         public void OnTimeTick(int count)
         {
-            CardReader.CardStatus cs = CardReader.CardStatus.CARD_POS_GATE;
-            CardReader.Status s = CardReader.GetStatus(ref cs);
-            if (cs == CardReader.CardStatus.CARD_POS_OUT)
-            {
-                mUserTakeCard = true;
-            }
+            //CardReader.CardStatus cs = CardReader.CardStatus.CARD_POS_GATE;
+            //CardReader.Status s = CardReader.GetStatus(ref cs);
+            //if (cs == CardReader.CardStatus.CARD_POS_OUT)
+            //{
+            //    mUserTakeCard = true;
+            //}
         }
-
         #endregion
     }
 }

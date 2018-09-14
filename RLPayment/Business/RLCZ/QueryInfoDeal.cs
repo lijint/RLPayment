@@ -8,17 +8,16 @@ using System.Windows.Forms;
 
 namespace RLPayment.Business.RLCZ
 {
-    class InputRLCardNoDeal : FrameActivity
+    class QueryInfoDeal : FrameActivity
     {
+
         private RLCZEntity _entity;
-        private string cardNum;
         protected override void OnEnter()
         {
             base.OnEnter();
             try
             {
                 _entity = GetBusinessEntity() as RLCZEntity;
-                IsConDisplay(true);
                 GetElementById("ok").Click += new HtmlElementEventHandler(OKClick);
             }
             catch(Exception ex)
@@ -29,16 +28,14 @@ namespace RLPayment.Business.RLCZ
 
         private void OKClick(object sender, HtmlElementEventArgs e)
         {
-            cardNum = GetElementById("nums").GetAttribute("value");
-            if (string.IsNullOrEmpty(cardNum))
+            if (_entity.Amount == 0)
                 return;
-            _entity.CardNO = cardNum;
-            StartActivity("热力充值正在查询");
+            StartActivity("热力充值查入银行卡");
         }
 
         protected override void FrameReturnClick()
         {
-            GotoMain();
+            StartActivity("热力充值输入热力号");
         }
     }
 }
