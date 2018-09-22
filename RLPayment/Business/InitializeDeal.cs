@@ -85,17 +85,12 @@ namespace RLPayment.Business
         {
             try
             {
-#if DEBUG
-                step = 3;
-                readyTime = 0;
-                return;
-#endif
                 //打印步骤
                 //SetValue(rtbxMessage, String.Format("{0}流程:{1}, 步骤:{2}, 返回:{3}, 描述:{4}", "", ResponseEntity.ProcedureCode, ResponseEntity.StepCode, ResponseEntity.returnCode, ResponseEntity.args));
                 if (ResponseEntity.returnCode == "EE")
                 {
                     //无法捕获的异常
-                     StopServiceDeal.Message =  "系统故障，暂停服务。";
+                     StopServiceDeal.Message =  "系统故障|暂停服务。";
                     StartActivity("暂停服务");
                     return;
                 }
@@ -141,7 +136,7 @@ namespace RLPayment.Business
                     }
                     else
                     {
-                       StopServiceDeal.Message= "系统初始化失败：" + ResponseEntity.returnCode + "," + ResponseEntity.args;
+                       StopServiceDeal.Message= "系统初始化失败|" + ResponseEntity.returnCode + "," + ResponseEntity.args;
                        StartActivity("暂停服务");
                     }
                 }
@@ -163,14 +158,17 @@ namespace RLPayment.Business
             {
                 if (ResponseEntity.returnCode == "00")
                 {
-                    GetElementById("procSys").Style = "visibility:block;";
+                    //GetElementById("msg").Style = "height: 70%; visibility:block;";
                     readyTime = 3;
+                    success(step);
+                    step += 1;
+                    processing(step);
                     success(step);
                     step = 3;
                 }
                 else
                 {
-                      StopServiceDeal.Message=  "签到失败：" + ResponseEntity.returnCode + "," + ResponseEntity.args;
+                      StopServiceDeal.Message = "签到失败|" + ResponseEntity.returnCode + "," + ResponseEntity.args;
                       StartActivity("暂停服务");
                 }
             }

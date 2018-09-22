@@ -6,23 +6,29 @@ using System.Text;
 
 namespace RLPayment.Business.RLCZ
 {
-    class InsertBankCardDeal : FrameActivity
+    class BeingQueryQRCodeDeal : FrameActivity
     {
         protected override void OnEnter()
         {
             base.OnEnter();
             try
             {
-
+                if(queryQRCodeDeal()==0)
+                {
+                     
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
             }
         }
-        protected override void FrameReturnClick()
+
+        private int queryQRCodeDeal()
         {
-            StartActivity("热力充值缴费方式选择");
+            int ret = -1;
+            ret = 0;
+            return ret;
         }
     }
 }

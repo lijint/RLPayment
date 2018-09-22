@@ -30,7 +30,7 @@ namespace RLPayment.Business.RLCZ
         {
             if (_entity.Amount == 0)
                 return;
-            StartActivity("热力充值查入银行卡");
+            StartActivity("热力充值缴费方式选择");
         }
 
         protected override void FrameReturnClick()

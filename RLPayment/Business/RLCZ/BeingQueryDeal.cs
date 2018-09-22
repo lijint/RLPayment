@@ -31,6 +31,7 @@ namespace RLPayment.Business.RLCZ
         private int querymsg()
         {
             int ret = -1;
+            ret = 0;
             return ret;
         }
 

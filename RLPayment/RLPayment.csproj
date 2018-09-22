@@ -54,6 +54,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>公司ICO.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EudemonLink, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="InputChaIphoneLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -86,9 +89,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\TerminalLib.dll</HintPath>
     </Reference>
-    <Reference Include="TGhBankCardLib, Version=1.1.0.0, Culture=neutral, PublicKeyToken=a8089d9d05bcc68a, processorArchitecture=x86">
+    <Reference Include="THdqPayLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\TGhBankCardLib.dll</HintPath>
+      <HintPath>bin\Debug\THdqPayLib.dll</HintPath>
+    </Reference>
+    <Reference Include="TTlBankCardLib, Version=1.1.0.0, Culture=neutral, PublicKeyToken=a8089d9d05bcc68a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\TTlBankCardLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -97,11 +104,14 @@
     <Compile Include="Business\MainPageDeal.cs" />
     <Compile Include="Business\RLCZ\BeingProcessDeal.cs" />
     <Compile Include="Business\RLCZ\BeingQueryDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingQueryQRCodeDeal.cs" />
+    <Compile Include="Business\RLCZ\ChoosePayTypeDeal.cs" />
     <Compile Include="Business\RLCZ\CommonErrorDeal.cs" />
     <Compile Include="Business\RLCZ\CommonSuccessDeal.cs" />
     <Compile Include="Business\RLCZ\InputPasswordDeal.cs" />
     <Compile Include="Business\RLCZ\InputRLCardNoDeal.cs" />
     <Compile Include="Business\RLCZ\InsertBankCardDeal.cs" />
+    <Compile Include="Business\RLCZ\QRCodeInfoDeal.cs" />
     <Compile Include="Business\RLCZ\QueryInfoDeal.cs" />
     <Compile Include="Business\RLCZ\RLCZStratagy.cs" />
     <Compile Include="Entity\RLCZEntity.cs" />
@@ -168,7 +178,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="公司ICO.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

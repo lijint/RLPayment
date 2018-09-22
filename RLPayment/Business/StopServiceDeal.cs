@@ -9,11 +9,33 @@ namespace RLPayment.Business
 
         protected override void OnEnter()
         {
-            string msg = (string)MyIntent.GetExtra("Message");
-            if (string.IsNullOrEmpty(msg))
-                msg = Message;
-            GetElementById("Message1").InnerText = msg;
-            GetElementById("Message2").InnerText = "请联系工作人员！";
+            //string msg = (string)MyIntent.GetExtra("Message");
+            //if (string.IsNullOrEmpty(msg))
+            //    msg = Message;
+            //GetElementById("Message1").InnerText = msg;
+            //GetElementById("Message2").InnerText = "请联系工作人员！";
+
+            string msgstr = (string)MyIntent.GetExtra("Message");
+            if (string.IsNullOrEmpty(msgstr))
+                msgstr = Message;
+            int index = msgstr.IndexOf('|');
+
+            if (index > -1)
+            {
+                string[] messagestr = msgstr.Split(new char[] { '|' });
+
+                if (messagestr.Length == 2)
+                {
+                    GetElementById("Message1").InnerText = messagestr[0];
+                    GetElementById("Message2").InnerText = messagestr[1];
+                }
+            }
+            else
+            {
+                GetElementById("Message1").InnerText = msgstr;
+                GetElementById("Message2").InnerText = " ";
+            }
+
 
             //GetElementById("MessageSub").InnerText = msg;
             //GetElementById("MessageSub").Style = "font-size:25px; visibility:visible";
