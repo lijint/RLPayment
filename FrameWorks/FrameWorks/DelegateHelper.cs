@@ -223,7 +223,7 @@ namespace Landi.Tools
                 if (wb.InvokeRequired)
                 {
                     WBGetElementByIdHandler getElementbById = new WBGetElementByIdHandler(WBGetElementById);
-                    wb.Invoke(getElementbById, wb, id);
+                    returnHtmlElement = (HtmlElement)wb.Invoke(getElementbById, wb, id);
                 }
                 else
                 {
