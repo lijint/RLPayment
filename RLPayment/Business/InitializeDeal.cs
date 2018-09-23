@@ -7,6 +7,7 @@ using System.IO;
 using System.ComponentModel;
 using Landi.FrameWorks;
 using TerminalLib;
+using Landi.Tools;
 
 namespace RLPayment.Business
 {

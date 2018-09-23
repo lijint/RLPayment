@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using Landi.Tools;
 
 namespace Landi.FrameWorks
 {
@@ -930,7 +931,8 @@ namespace Landi.FrameWorks
 
         internal HtmlElement GetElementById(string id)
         {
-            return mWebBrowser.Document.GetElementById(id);
+            return DelegateHelper.WBGetElementById(mWebBrowser, id);
+            //return mWebBrowser.Document.GetElementById(id);
         }
 
         private delegate void Invoker(Activity target, object reportedData);
