@@ -110,7 +110,7 @@
     <Compile Include="Frameworks\CustomActivity\SingleTableActivity.cs" />
     <Compile Include="Frameworks\ConfigFile.cs" />
     <Compile Include="Frameworks\DelegateHelper.cs" />
-    <Compile Include="Frameworks\FrameActivity.cs" />
+    <Compile Include="Frameworks\FrameworkActivity.cs" />
     <Compile Include="Frameworks\Intent.cs" />
     <Compile Include="Frameworks\ITimeTick.cs" />
     <Compile Include="Frameworks\Log.cs" />

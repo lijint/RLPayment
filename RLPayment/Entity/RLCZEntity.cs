@@ -15,7 +15,7 @@ namespace RLPayment.Entity
         #endregion
 
         public string CardNO;
-        public decimal Amount;
+        public double Amount;
         public int PayType;             //0---YHK 1---WX 2---ZFB
 
         public override string SectionName

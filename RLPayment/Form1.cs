@@ -10,6 +10,7 @@ using InputChaIphoneLib;
 using System.IO;
 using EudemonLink;
 using TerminalLib;
+using Microsoft.Win32;
 
 namespace RLPayment
 {
@@ -19,12 +20,13 @@ namespace RLPayment
         private bool m_check;
         public Form1()
         {
+            WriteWebBrowserRegKey("FEATURE_BROWSER_EMULATION", 10001, true);//此处暂时只能设置到IE10,如果设置成IE11,加载的页面内容将允许被选中
             InitializeComponent();
             m_check = false;
             m_timer = new System.Timers.Timer();
             m_timer.Interval = 1000;
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(m_timer_Elapsed);
-            Global.gTerminalPay=new TerminalPay();
+            Global.gTerminalPay = new TerminalPay();
             if (GlobalAppData.GetInstance().EudemonSwitch)
             {
                 EudemonHandler.Instance.SetEudemonTicket(60);
@@ -214,5 +216,35 @@ namespace RLPayment
 
             return bRet;
         }
+        public static void WriteWebBrowserRegKey(string regkeyname, int regkeyvalue, bool bIsUse)
+        {
+            RegistryKey reg = null;
+            try
+            {
+                reg = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\" + regkeyname, true);
+                if (reg == null)
+                    reg = Registry.LocalMachine.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\" + regkeyname);
+                string applicationname = Application.ProductName + @".exe";
+                if (bIsUse)
+                {
+                    reg.SetValue(applicationname, regkeyvalue, RegistryValueKind.DWord);
+                }
+                else
+                {
+                    reg.DeleteValue(applicationname, false);
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+            finally
+            {
+                if (reg != null)
+                    reg.Close();
+            }
+        }
+
     }
 }

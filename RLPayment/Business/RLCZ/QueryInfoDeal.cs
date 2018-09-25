@@ -12,12 +12,14 @@ namespace RLPayment.Business.RLCZ
     {
 
         private RLCZEntity _entity;
+        private string Amount;
         protected override void OnEnter()
         {
             base.OnEnter();
             try
             {
                 _entity = GetBusinessEntity() as RLCZEntity;
+                Amount = "0.01";
                 GetElementById("ok").Click += new HtmlElementEventHandler(OKClick);
             }
             catch(Exception ex)
@@ -28,9 +30,17 @@ namespace RLPayment.Business.RLCZ
 
         private void OKClick(object sender, HtmlElementEventArgs e)
         {
-            if (_entity.Amount == 0)
-                return;
-            StartActivity("热力充值缴费方式选择");
+            if (!string.IsNullOrEmpty(Amount))
+            {
+                if (double.TryParse(Amount, out _entity.Amount))
+                {
+                    StartActivity("热力充值缴费方式选择");
+                }
+                else
+                {
+                    Log.Error("金额转换错误|金额中含有字符串");
+                }
+            }
         }
 
         protected override void FrameReturnClick()

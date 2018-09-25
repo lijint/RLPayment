@@ -115,6 +115,7 @@
     <Compile Include="Business\RLCZ\QueryInfoDeal.cs" />
     <Compile Include="Business\RLCZ\RLCZStratagy.cs" />
     <Compile Include="Entity\RLCZEntity.cs" />
+    <Compile Include="FrameActivity.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Business\ServiceNotClearDeal.cs">
       <SubType>Code</SubType>

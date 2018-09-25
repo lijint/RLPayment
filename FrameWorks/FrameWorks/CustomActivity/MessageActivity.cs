@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Landi.FrameWorks
 {
-    public abstract class MessageActivity : FrameActivity
+    public abstract class MessageActivity : FrameworkActivity
     {
         internal const string MESSAGE = "System.Message";
         internal const string Main_OR_BACK = "System.MainOrBack";
