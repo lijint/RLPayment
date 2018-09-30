@@ -74,7 +74,7 @@ namespace RLPayment.Business
                         success(step);
                         Global.gTerminalPay.BusinessLib = String.Format("{0}.SignInService", Global.gBankCardLibName);
                         Global.gTerminalPay.SignIn();
-                        step = 1;
+                        step += 1;
                         processing(step);
                     }
                     else
@@ -97,24 +97,49 @@ namespace RLPayment.Business
         /// <param name="ResponseEntity"></param>
         protected override void SignInCallback(ResponseData ResponseEntity)
         {
+            //if (Global.gTerminalPay.BusinessLib == Global.gBankCardLibName)
+            //{
             if (ResponseEntity.StepCode == "ProceduresEnd")
             {
                 if (ResponseEntity.returnCode == "00")
                 {
-                    //GetElementById("msg").Style = "height: 70%; visibility:block;";
-                    readyTime = 3;
+                    #region 根据银行返回设置本地时间
+                    DateTimeHelper.SetLocalDateTime(Convert.ToDateTime(ResponseEntity.TransDateTime));
+                    #endregion
                     success(step);
+                    //Global.gTerminalPay.BusinessLib = String.Format("{0}.SignInService", Global.gWFTBankCardLibName);
+                    //Global.gTerminalPay.SignIn();
                     step += 1;
                     processing(step);
+                    readyTime = 3;
                     success(step);
                     step = 3;
+
                 }
                 else
                 {
-                      StopServiceDeal.Message = "签到失败|" + ResponseEntity.returnCode + "," + ResponseEntity.args;
-                      StartActivity("暂停服务");
+                    StopServiceDeal.Message = "签到失败|" + ResponseEntity.returnCode + "," + ResponseEntity.args;
+                    StartActivity("暂停服务");
                 }
             }
+            //}
+            //else if(Global.gTerminalPay.BusinessLib == Global.gWFTBankCardLibName)
+            //{
+            //    if (ResponseEntity.StepCode == "ProceduresEnd")
+            //    {
+            //        if (ResponseEntity.returnCode == "00")
+            //        {
+            //            readyTime = 3;
+            //            success(step);
+            //            step = 3;
+            //        }
+            //        else
+            //        {
+            //            StopServiceDeal.Message = "签到失败|" + ResponseEntity.returnCode + "," + ResponseEntity.args;
+            //            StartActivity("暂停服务");
+            //        }
+            //    }
+            //}
         }
         protected override void OnCreate()
         {

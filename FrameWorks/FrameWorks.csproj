@@ -133,6 +133,7 @@
     <Compile Include="MediaAdForm.Designer.cs">
       <DependentUpon>MediaAdForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Package\Other\SocketCommunicate.cs" />
     <Compile Include="PictureAdForm.cs">
       <SubType>Form</SubType>
     </Compile>

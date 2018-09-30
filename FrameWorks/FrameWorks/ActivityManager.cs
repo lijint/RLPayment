@@ -414,6 +414,7 @@ namespace Landi.FrameWorks
                 mWebBrowser.Document.Body.MouseDown -= new HtmlElementEventHandler(Body_MouseDown);
                 mWebBrowser.Document.Body.KeyDown += new HtmlElementEventHandler(Body_KeyDown);
                 mWebBrowser.Document.Body.MouseDown += new HtmlElementEventHandler(Body_MouseDown);
+
                 string realFileName = Path.Combine(Intent.PageFilePath, mPendingIntent.PageFileName);
                 using (StreamReader fileReader = new StreamReader(realFileName, Encoding.GetEncoding("utf-8")))
                 {

@@ -18,7 +18,10 @@ namespace RLPayment.Business.RLCZ
             try
             {
                 _entity = GetBusinessEntity() as RLCZEntity;
+
+                _entity.LoadConfig();
                 IsConDisplay(true);
+                
                 GetElementById("ok").Click += new HtmlElementEventHandler(OKClick);
             }
             catch(Exception ex)
@@ -39,6 +42,11 @@ namespace RLPayment.Business.RLCZ
         protected override void FrameReturnClick()
         {
             GotoMain();
+        }
+        protected override void OnKeyDown(Keys keyCode)
+        {
+            GetElementById("nums").Focus();
+            base.OnKeyDown(keyCode);
         }
     }
 }

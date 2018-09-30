@@ -100,6 +100,14 @@ namespace RLPayment
                 InsertCardStart();
                 //ShowPanel(PanelName.InsertCard);
             }
+            else if (ResponseEntity.StepCode == "ScanCodeWftImageStart")
+            {
+                PreCreateSucc();
+            }
+            else if (ResponseEntity.StepCode == "InsertCardCancel")
+            {
+                InsertCardCancel();
+            }
             else if (ResponseEntity.StepCode == "HasIcCardInside")
             {
                 HasCardInside();
@@ -126,11 +134,16 @@ namespace RLPayment
                 //SetElementHtml(label13, "密码：" + ResponseEntity.args);
                 InputPasswordErr();
             }
-            else if (ResponseEntity.StepCode == "TransStart")
+            else if (ResponseEntity.StepCode == "InputPasswordEnd")
             {
                 GotoProcess();
             }
         }
+
+        protected virtual void PreCreateSucc()
+        { }
+        protected virtual void InsertCardCancel()
+        { }
 
         protected virtual void InsertCardStart()
         { }
@@ -151,11 +164,16 @@ namespace RLPayment
         { }
 
         protected virtual void EEError()
+        {
+            ShowMessageAndGotoMain("程序出错|请返回！");
+        }
+    
+
+    protected virtual void GotoNextActivity()
         { }
 
-        protected virtual void GotoNextActivity()
-        { }
 
+        #region Callback
         protected virtual void SignInCallback(ResponseData ResponseEntity)
         {
         }
@@ -178,6 +196,7 @@ namespace RLPayment
         protected virtual void CardReaderEjectCallBack(ResponseData ResponseEntity)
         {
         }
+        #endregion
 
 
         protected override void OnLeave()

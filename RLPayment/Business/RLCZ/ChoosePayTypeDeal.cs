@@ -36,11 +36,7 @@ namespace RLPayment.Business.RLCZ
         private void YHKClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 0;
-            RequestData request = new RequestData();
-            request.Amount = _entity.Amount;
-            Global.gTerminalPay.BusinessLib = String.Format("{0}.PayService", Global.gBankCardLibName);
-            Global.gTerminalPay.RequestEntity = request;
-            Global.gTerminalPay.Pay(request);
+            StartActivity("热力充值正在前置通信");
         }
         /// <summary>
         /// 微信支付
@@ -50,7 +46,9 @@ namespace RLPayment.Business.RLCZ
         private void WXClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 1;
-            StartActivity("热力充值正在查询二维码");
+            StartActivity("热力充值正在前置通信");
+
+            //StartActivity("热力充值正在查询二维码");
         }
         /// <summary>
         /// 支付宝支付
@@ -60,9 +58,10 @@ namespace RLPayment.Business.RLCZ
         private void ZFBClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 2;
-            StartActivity("热力充值正在查询二维码");
-        }
+            StartActivity("热力充值正在前置通信");
 
+            //StartActivity("热力充值正在查询二维码");
+        }
 
 
         protected override void FrameReturnClick()
@@ -70,9 +69,5 @@ namespace RLPayment.Business.RLCZ
             StartActivity("热力充值查询结果");
         }
 
-        protected override void InsertCardStart()
-        {
-            StartActivity("热力充值插入银行卡");
-        }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using TerminalLib;
 
 namespace RLPayment.Business.RLCZ
 {
@@ -56,6 +57,17 @@ namespace RLPayment.Business.RLCZ
         protected override void InputPasswordErr()
         {
             ShowMessageAndGotoMain("密码输入错误|" + Global.gTerminalPay.ResponseEntity.args);
+        }
+        protected override void PayCallback(ResponseData ResponseEntity)
+        {
+            if (ResponseEntity.StepCode == "ProceduresEnd")
+            {
+                if (ResponseEntity.returnCode == "04")
+                {
+                    //用户取消输入
+                    StartActivity("退卡");
+                }
+            }
         }
     }
 }

@@ -89,22 +89,26 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\TerminalLib.dll</HintPath>
     </Reference>
-    <Reference Include="THdqPayLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.3990.25764, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\THdqPayLib.dll</HintPath>
+      <HintPath>bin\Debug\ThoughtWorks.QRCode.dll</HintPath>
     </Reference>
     <Reference Include="TTlBankCardLib, Version=1.1.0.0, Culture=neutral, PublicKeyToken=a8089d9d05bcc68a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\TTlBankCardLib.dll</HintPath>
+    </Reference>
+    <Reference Include="TWftPayLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\TWftPayLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\EjectCardDeal.cs" />
     <Compile Include="Business\InitializeDeal.cs" />
     <Compile Include="Business\MainPageDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingCspospTransDeal.cs" />
     <Compile Include="Business\RLCZ\BeingProcessDeal.cs" />
     <Compile Include="Business\RLCZ\BeingQueryDeal.cs" />
-    <Compile Include="Business\RLCZ\BeingQueryQRCodeDeal.cs" />
     <Compile Include="Business\RLCZ\ChoosePayTypeDeal.cs" />
     <Compile Include="Business\RLCZ\CommonErrorDeal.cs" />
     <Compile Include="Business\RLCZ\CommonSuccessDeal.cs" />
@@ -127,9 +131,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Package\CSPospTrans.cs" />
     <Compile Include="PageManage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DateTimeHelper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form1.cs</DependentUpon>
@@ -181,6 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="公司ICO.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

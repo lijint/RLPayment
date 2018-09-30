@@ -10,13 +10,14 @@ namespace RLPayment.Business.RLCZ
 {
     class InsertBankCardDeal : FrameActivity
     {
-
+        private int FlagCancel;
         private RLCZEntity _entity;
         protected override void OnEnter()
         {
             base.OnEnter();
             try
             {
+                FlagCancel = 0;
                 _entity = GetBusinessEntity() as RLCZEntity;
                 RequestData request = new RequestData();
 
@@ -36,8 +37,6 @@ namespace RLPayment.Business.RLCZ
         protected override void FrameReturnClick()
         {
             Global.gTerminalPay.WaitInsertCardCancel();
-
-            StartActivity("热力充值缴费方式选择");
         }
 
         protected override void InsertCardEnd()
@@ -59,6 +58,21 @@ namespace RLPayment.Business.RLCZ
         protected override void EEError()
         {
             ShowMessageAndGotoMain("读卡出错|" + Global.gTerminalPay.ResponseEntity.args);
+        }
+
+        protected override void InsertCardCancel()
+        {
+            if (Global.gTerminalPay.ResponseEntity.returnCode == "03")
+            {
+                FlagCancel = 1;
+            }
+        }
+        protected override void PayCallback(ResponseData ResponseEntity)
+        {
+            if (ResponseEntity.StepCode == "ProceduresEnd" && ResponseEntity.returnCode == "24" && FlagCancel == 1)
+            {
+                StartActivity("热力充值缴费方式选择");
+            }
         }
 
     }
