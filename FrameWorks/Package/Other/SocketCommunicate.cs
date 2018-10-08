@@ -37,7 +37,7 @@ namespace Landi.FrameWorks.Package.Other
         {
         }
 
-        public int setIPAndPort(string ip,int port)
+        public int setIPAndPort(string ip, int port)
         {
             if (string.IsNullOrEmpty(ip) || port == 0)
                 return -1;
@@ -114,7 +114,6 @@ namespace Landi.FrameWorks.Package.Other
                     return ret;
                 }
                 RecvPackage = Encoding.UTF8.GetString(recv_all);
-                UnPacketHead();
                 
                 bool nRet = UnPacket();
                 if (nRet)

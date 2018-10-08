@@ -131,6 +131,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Package\CRLQueryTrans.cs" />
     <Compile Include="Package\CSPospTrans.cs" />
     <Compile Include="PageManage.cs" />
     <Compile Include="Program.cs" />

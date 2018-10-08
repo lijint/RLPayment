@@ -54,6 +54,13 @@ namespace RLPayment.Entity
         public string BANKCODE;         //银行代码
         public string BUSSINESSCODE;    //营业区码
         public string GUICODE;          //柜员号
+
+        public string ReturnCode;       //返回信息码
+        public string Addr;             //地址
+        public string UserName;         //用户名称
+        public string CompanyCode;      //公司代码
+        //public int
+        public UserInfo userInfo;       //欠费明细
         #endregion
 
         #region 威富通参数
@@ -401,4 +408,16 @@ namespace RLPayment.Entity
         }
         #endregion
     }
+
+    public class UserInfo
+    {
+        public string FeeType;      //费用类别
+        public string HeatingPeriod;//采暖期
+        public double Area;         //面积
+        public double Price;        //单价
+        public double Amount;       //应收金额
+        public double amountOwed;       //欠费金额
+
+    }
+
 }
