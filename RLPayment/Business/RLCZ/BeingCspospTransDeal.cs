@@ -19,7 +19,7 @@ namespace RLPayment.Business.RLCZ
             try
             {
                 _entity = GetBusinessEntity() as RLCZEntity;
-                if (BeingProcess() == 0)
+                //if (BeingProcess() == 0)
                 {
                     RequestData _request = new RequestData();
                     Random r = new Random();
@@ -87,7 +87,6 @@ namespace RLPayment.Business.RLCZ
         private int BeingProcess()
         {
             int ret = -1;
-#if !DEBUG
             CSPospTrans cSPospTrans = new CSPospTrans(_entity);
             cSPospTrans.setIPAndPort(_entity.CspospServerIP, _entity.CspospServerPort);
             TransResult result = cSPospTrans.transact();
@@ -100,20 +99,37 @@ namespace RLPayment.Business.RLCZ
                 Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err " + "respcode : " + cSPospTrans.respcode + " respmsg : " + cSPospTrans.respmsg + "RETURNCODE:" + cSPospTrans.RETURNCODE + " MESSAGE" + cSPospTrans.MESSAGE);
                 ShowMessageAndGotoMain("预通知失败|" + cSPospTrans.respcode + " == " + cSPospTrans.RETURNCODE);
             }
-#else
-            ret = 0;
-#endif
             return ret;
         }
 
         protected override void InsertCardStart()
         {
-            StartActivity("热力充值插入银行卡");
+            _entity.OrderNumber = _entity.gTerminalNo + DateTime
+                .Now.ToString("yyyyMMddhhmmss")+ _entity.gTraceNo+(new Random()).Next(1000,10000).ToString();
+            if (BeingProcess() == 0)
+                StartActivity("热力充值插入银行卡");
         }
 
         protected override void PreCreateSucc()
         {
-            StartActivity("热力充值二维码显示");
+            _entity.OrderNumber = Global.gTerminalPay.ResponseEntity.PosTraceNumber;
+            if (BeingProcess() == 0)
+                StartActivity("热力充值二维码显示");
+            else
+            {
+                Global.gTerminalPay.WaitInsertCardCancel();
+            }
+        }
+
+        protected override void PayCallback(ResponseData ResponseEntity)
+        {
+            if (ResponseEntity.StepCode == "ProceduresEnd")
+            {
+                if (ResponseEntity.returnCode != "00")
+                {
+                    ShowMessageAndGotoMain("缴费失败|" + ResponseEntity.returnCode);
+                }
+            }
         }
 
     }

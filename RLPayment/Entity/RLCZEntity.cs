@@ -11,7 +11,7 @@ namespace RLPayment.Entity
         #region 常量
 
         public const string SECTION_NAME = "RLCZPayment";
-        
+
         public override string SectionName
         {
             get { return SECTION_NAME; }
@@ -40,32 +40,53 @@ namespace RLPayment.Entity
             get { return int.Parse(ReadIniFile("RLServerPort")); }
         }
 
+        /// <summary>
+        /// 唯一标识订单信息，终端号+时间（yyyyMMddhhmmss)+流水号（11域）+4位随机数
+        /// </summary>
+        public string OrderNumber;
+
         public string gBranchNo;        //商户号
         public string gTerminalNo;      //终端号
         public string gBatchNo;         //批次号
         public string gTraceNo;         //流水号
 
+        public bool UseICCard
+        {
+            get { return ReadIniFile("UseICCard") == "1"; }
+            set { WriteIniFile("UseICCard", value ? "1" : "0"); }
+        }
+
         #region 热力参数
+
+
+        public string BANKCODE          //银行代码
+        {
+            get { return ReadIniFile("BANKCODE"); }
+        }
+        public string BUSSINESSCODE     //营业区码
+        {
+            get { return ReadIniFile("BUSSINESSCODE"); }
+        }
+        public string GUICODE           //柜员号
+        {
+            get { return ReadIniFile("GUICODE"); }
+        }
+
         public string HOTBILLTYPE;      //热力票据类别
         public string HOTBILLNO;        //热力票据号
         public string HOTUSERID;        //热力用户编码
-        public string HOTFLOWNO;        //热力流水号
         public string HOTPAYTYPE;       //热力付款类型
-        public string BANKCODE;         //银行代码
-        public string BUSSINESSCODE;    //营业区码
-        public string GUICODE;          //柜员号
 
         public string ReturnCode;       //返回信息码
+        public string ReturnMsg;        //返回信息
         public string Addr;             //地址
         public string UserName;         //用户名称
         public string CompanyCode;      //公司代码
-        //public int
-        public UserInfo userInfo;       //欠费明细
+        public double PastBalance;      //往期余额
+        public double TotalArrears;     //欠费总额
+        public List<UserInfo> userInfoList = new List<UserInfo>();       //欠费明细
         #endregion
-
-        #region 威富通参数
-        public string ORDERNO;          //威富通订单号
-        #endregion
+        
 
         #region 载入配置
         /// <summary>
@@ -407,15 +428,22 @@ namespace RLPayment.Entity
             return sb.ToString();
         }
         #endregion
+
+        public string GetReturnMsg(string returnCode)
+        {
+            string retStr = "";
+            retStr = ConfigFile.ReadConfigAndCreate("ReturnMsg", returnCode);
+            return retStr;
+        }
     }
 
     public class UserInfo
     {
-        public string FeeType;      //费用类别
-        public string HeatingPeriod;//采暖期
-        public double Area;         //面积
-        public double Price;        //单价
-        public double Amount;       //应收金额
+        public string FeeType;          //费用类别
+        public string HeatingPeriod;    //采暖期
+        public double Area;             //面积
+        public double Price;            //单价
+        public double ReceivableAmount; //应收金额
         public double amountOwed;       //欠费金额
 
     }

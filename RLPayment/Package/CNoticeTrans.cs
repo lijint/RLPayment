@@ -8,28 +8,47 @@ using System.Text;
 
 namespace RLPayment.Package
 {
-    class CRLQueryTrans : SocketCommunicate
+    class CNoticeTrans: SocketCommunicate
     {
         public RLCZEntity _entity;
         private string TransCode;
 
-        CRLQueryTrans(RLCZEntity entity)
+        CNoticeTrans(RLCZEntity entity)
         {
             if (entity != null)
                 _entity = entity;
             HeadLength = 4;
-            TransCode = "01";
+            TransCode = "02";
         }
 
         protected override void Packet()
         {
+            _entity.HOTBILLTYPE = "电子凭证";
+            _entity.HOTBILLNO = _entity.OrderNumber;
+            if(_entity.PayType==0)
+            {
+                _entity.HOTPAYTYPE = "网上银行";
+            }
+            else if(_entity.PayType==1)
+            {
+                _entity.HOTPAYTYPE = "微信";
+            }
+            else if(_entity.PayType==2)
+            {
+                _entity.HOTPAYTYPE = "支付宝";
+            }
+
             SendPackage = "";
             SendPackage += TransCode;
             SendPackage += _entity.BANKCODE.PadLeft(2, ' ');
             SendPackage += _entity.BUSSINESSCODE.PadLeft(8, ' ');
             SendPackage += _entity.GUICODE.PadLeft(16, ' ');
-            SendPackage += _entity.CardNO.PadLeft(8, ' ');
-
+            SendPackage += _entity.HOTUSERID.PadLeft(10, ' ');
+            SendPackage += _entity.HOTBILLTYPE.PadLeft(16, ' ');
+            SendPackage += _entity.HOTBILLNO.PadLeft(32, ' ');
+            SendPackage += _entity.OrderNumber.PadLeft(32, ' ');
+            SendPackage += string.Format("{0:F2}", _entity.Amount).PadLeft(11, '0');
+            SendPackage += Global.gTerminalPay.ResponseEntity.TransDateTime.Replace(":","").Replace(" ","");
         }
         protected override bool UnPacket()
         {
@@ -43,36 +62,6 @@ namespace RLPayment.Package
                 {
                     _entity.ReturnMsg = _entity.GetReturnMsg(_entity.ReturnCode);
                     return ret;
-                }
-                _entity.CardNO = RecvPackage.Substring(2, 8);
-                _entity.HOTUSERID = RecvPackage.Substring(10, 10);
-                _entity.Addr = RecvPackage.Substring(20, 64);
-                _entity.UserName = RecvPackage.Substring(84, 64);
-                _entity.CompanyCode = RecvPackage.Substring(148, 2);
-                _entity.PastBalance = double.Parse(RecvPackage.Substring(150, 11).Trim());
-                _entity.TotalArrears = double.Parse(RecvPackage.Substring(161, 11).Trim());
-                int times = int.Parse(RecvPackage.Substring(172, 2).Trim());
-                if (times > 0)
-                {
-                    int pos = 174;
-                    for (int i = 0; i < times; i++)
-                    {
-                        UserInfo u = new UserInfo();
-                        u.FeeType = RecvPackage.Substring(pos, 16);
-                        pos += 16;
-                        u.HeatingPeriod = RecvPackage.Substring(pos, 9);
-                        pos += 9;
-                        u.Area = double.Parse(RecvPackage.Substring(pos, 11));
-                        pos += 11;
-                        u.Price = double.Parse(RecvPackage.Substring(pos, 7));
-                        pos += 7;
-                        u.ReceivableAmount = double.Parse(RecvPackage.Substring(pos, 11));
-                        pos += 11;
-                        u.amountOwed = double.Parse(RecvPackage.Substring(pos, 11));
-                        pos += 11;
-
-                        _entity.userInfoList.Add(u);
-                    }
                 }
                 ret = true;
             }
@@ -98,5 +87,6 @@ namespace RLPayment.Package
             Array.Copy(SendBytes, 0, send_all, headLength, SendBytes.Length);
             return send_all;
         }
+
     }
 }

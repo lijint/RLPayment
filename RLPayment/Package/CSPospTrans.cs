@@ -63,17 +63,21 @@ namespace RLPayment.Package
             postdata.ADDITIONDATA.HOTBILLTYPE = _entity.HOTBILLTYPE;
             postdata.ADDITIONDATA.HOTBILLNO = _entity.HOTBILLNO;
             postdata.ADDITIONDATA.HOTUSERID = _entity.HOTUSERID;
-            postdata.ADDITIONDATA.HOTFLOWNO = _entity.HOTFLOWNO;
+            postdata.ADDITIONDATA.HOTFLOWNO = _entity.OrderNumber;
             postdata.ADDITIONDATA.HOTPAYTYPE = _entity.HOTPAYTYPE;
             postdata.ADDITIONDATA.BANKCODE = _entity.BANKCODE;
             postdata.ADDITIONDATA.BUSSINESSCODE = _entity.BUSSINESSCODE;
             postdata.ADDITIONDATA.GUICODE = _entity.GUICODE;
-            postdata.ADDITIONDATA.ORDERNO = _entity.ORDERNO;
 
             if (_entity.PayType == 0)
+            {
                 postdata.ADDITIONDATA.PAYTYPE = "1";
+            }
             else if (_entity.PayType == 1 || _entity.PayType == 2)
+            {
+                postdata.ADDITIONDATA.ORDERNO = _entity.OrderNumber;
                 postdata.ADDITIONDATA.PAYTYPE = "2";
+            }
 
             retAdditionStr = JsonConvert.SerializeObject(postdata);
             return retAdditionStr;
