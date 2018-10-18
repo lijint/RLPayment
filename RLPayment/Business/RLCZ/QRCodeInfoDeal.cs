@@ -48,7 +48,7 @@ namespace RLPayment.Business.RLCZ
         {
             Global.gTerminalPay.WaitInsertCardCancel();
             //Sleep(2000);
-            //StartActivity("热力充值缴费方式选择");
+            StartActivity("热力充值正在返回");
         }
 
         private string GetQRCodeImg(string codeUrl)
@@ -80,14 +80,13 @@ namespace RLPayment.Business.RLCZ
         {
             if (ResponseEntity.StepCode == "ProceduresEnd")
             {
-                if (ResponseEntity.returnCode == "00" && FlagCancel != 1)
+                if (ResponseEntity.returnCode == "00")
                 {
+                    _entity.bBankBackTransDateTime = DateTime.Now.Year + ResponseEntity.TransDate + ResponseEntity.TransTime;
+                    _entity.bHostSerialNumber = ResponseEntity.HostSerialNumber;
                     //交易成功
-                    StartActivity("热力充值通用成功");
-                }
-                else if (FlagCancel == 1)
-                {
-                    StartActivity("热力充值缴费方式选择");
+                    StartActivity("热力充值正在前置通信");
+                    //StartActivity("热力充值通用成功");
                 }
                 else
                 {
@@ -96,15 +95,6 @@ namespace RLPayment.Business.RLCZ
             }
         }
 
-        protected override void InsertCardCancel()
-        {
-            if (Global.gTerminalPay.ResponseEntity.returnCode == "03")
-            {
-                FlagCancel = 1;
-                //StartActivity("热力充值缴费方式选择");
-
-            }
-        }
 
     }
 }

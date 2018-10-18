@@ -26,7 +26,7 @@ namespace RLPayment.Package
             HeadLength = 4;
         }
 
-        protected override void Packet()
+        protected override byte[] Packet()
         {
             PacketData packetData = new PacketData();
 
@@ -44,6 +44,11 @@ namespace RLPayment.Package
             packetData.postlength = packetData.postdata.Length;
 
             SendPackage = JsonConvert.SerializeObject(packetData);
+
+            if (SendPackage == null)
+                return null;
+            return Encoding.UTF8.GetBytes(SendPackage);
+
         }
 
         private string packetAdditiondata()
@@ -53,11 +58,12 @@ namespace RLPayment.Package
 
             postdata.ADDITIONDATA.BANKCARDNO = CommonData.BankCardNum;
             postdata.ADDITIONDATA.AMOUNT = CommonData.Amount.ToString();
-            postdata.ADDITIONDATA.TRANSDATE = DateTime.Now.ToString("yyyyMMddHHmmss");
+            postdata.ADDITIONDATA.TRANSDATE = _entity.bBankBackTransDateTime;
             postdata.ADDITIONDATA.FLOWNO = _entity.gTraceNo;
             postdata.ADDITIONDATA.BATCHNO = _entity.gBatchNo;
             postdata.ADDITIONDATA.BANKTERMINALNO = _entity.gTerminalNo;
             postdata.ADDITIONDATA.BANKBRANCHNO = _entity.gBranchNo;
+            postdata.ADDITIONDATA.BANKREFNO = _entity.bHostSerialNumber;
             postdata.ADDITIONDATA.MEMO = "预上送交易";
 
             postdata.ADDITIONDATA.HOTBILLTYPE = _entity.HOTBILLTYPE;
@@ -83,8 +89,11 @@ namespace RLPayment.Package
             return retAdditionStr;
         }
 
-        protected override bool UnPacket()
+        protected override bool UnPacket(byte[] recv_all)
         {
+            RecvPackage = Encoding.UTF8.GetString(recv_all);
+            Log.Info("recv packet : " + RecvPackage);
+
             try
             {
                 if (string.IsNullOrEmpty(RecvPackage))
@@ -133,6 +142,17 @@ namespace RLPayment.Package
             Array.Copy(SendBytes, 0, send_all, headLength, SendBytes.Length);
             return send_all;
         }
+
+        protected override int UnPacketHead(byte[] recHead)
+        {
+            int recvPacketLength = 0;
+            for (int i = 0; i < HeadLength; i++)
+            {
+                recvPacketLength += HeadLength * 256 + recHead[i];
+            }
+            Log.Info("recv packet len : " + recvPacketLength);
+            return recvPacketLength;
+        }
     }
 
     public class PacketData
@@ -174,6 +194,7 @@ namespace RLPayment.Package
         public string BATCHNO;          //终端批次号
         public string BANKTERMINALNO;   //银行终端号
         public string BANKBRANCHNO;     //银行商户号
+        public string BANKREFNO;        //银行系统参考号
         public string MEMO;             //备注
         public string HOTBILLTYPE;      //热力票据类别
         public string HOTBILLNO;        //热力票据号

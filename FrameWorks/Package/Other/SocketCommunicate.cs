@@ -70,14 +70,14 @@ namespace Landi.FrameWorks.Package.Other
             {
                 ret = TransResult.E_PACKET_FAIL;
                 byte[] SendBytes = new byte[0];
-                Packet();
-                if (SendPackage == null)
+                SendBytes = Packet();
+                if (SendBytes == null)
                     return TransResult.E_INVALID;
 
-                SendBytes = Encoding.UTF8.GetBytes(SendPackage);
                 byte[] send_all = PacketHead(SendBytes);
                 ret = TransResult.E_SEND_FAIL;
                 int sendLen = 0;
+                Log.Info("send packet : " + SendPackage);
                 sendLen = socket.Send(send_all, send_all.Length, 0);
                 if (sendLen <= 0)
                 {
@@ -97,11 +97,12 @@ namespace Landi.FrameWorks.Package.Other
                     socket.Close();
                     return ret;
                 }
-                for (int i = 0; i < HeadLength; i++)
+                recvPacketLength = UnPacketHead(recHead);
+                if (recvPacketLength <= 0)
                 {
-                    recvPacketLength += recHead[i] * (256 ^ i);
+                    socket.Close();
+                    return ret;
                 }
-
                 //接收包体
                 recvLen = 0;
                 byte[] recv_all = new byte[recvPacketLength];
@@ -113,9 +114,8 @@ namespace Landi.FrameWorks.Package.Other
                     socket.Close();
                     return ret;
                 }
-                RecvPackage = Encoding.UTF8.GetString(recv_all);
-                
-                bool nRet = UnPacket();
+                //RecvPackage = Encoding.UTF8.GetString(recv_all);
+                bool nRet = UnPacket(recv_all);
                 if (nRet)
                 {
                     ret = TransResult.E_SUCC;
@@ -141,13 +141,13 @@ namespace Landi.FrameWorks.Package.Other
 
         protected virtual byte[] PacketHead(byte[] SendBytes)
         { return null; }
-        protected virtual byte[] UnPacketHead()
+        protected virtual int UnPacketHead(byte[] recvHead)
+        { return 0; }
+
+
+        protected virtual byte[] Packet()
         { return null; }
-
-
-        protected virtual void Packet()
-        { }
-        protected virtual bool UnPacket()
+        protected virtual bool UnPacket(byte[] recv)
         { return true; }
     }
 }

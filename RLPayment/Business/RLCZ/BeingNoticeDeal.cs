@@ -9,7 +9,7 @@ using static Landi.FrameWorks.Package.Other.SocketCommunicate;
 
 namespace RLPayment.Business.RLCZ
 {
-    class BeingQueryDeal : FrameActivity
+    class BeingNoticeDeal : FrameActivity
     {
         private RLCZEntity _entity;
         protected override void OnEnter()
@@ -20,14 +20,15 @@ namespace RLPayment.Business.RLCZ
                 _entity = GetBusinessEntity() as RLCZEntity;
                 if (querymsg() == 0)
                 {
-                    StartActivity("热力充值查询结果");
+                    StartActivity("热力充值正在打印");
+                    //StartActivity("热力充值通用成功");
                 }
                 else
                 {
-                    ShowMessageAndGoBack("查询出错|" + _entity.ReturnCode + _entity.ReturnMsg);
+                    ShowMessageAndGoBack("缴费通知出错|" + _entity.ReturnCode + _entity.ReturnMsg);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
             }
@@ -38,7 +39,7 @@ namespace RLPayment.Business.RLCZ
             int ret = -1;
             try
             {
-                CRLQueryTrans cSPospTrans = new CRLQueryTrans(_entity);
+                CNoticeTrans cSPospTrans = new CNoticeTrans(_entity);
                 cSPospTrans.setIPAndPort(_entity.RLServerIP, _entity.RLServerPort);
                 TransResult result = cSPospTrans.transact();
                 if (result == TransResult.E_SUCC)
@@ -46,7 +47,7 @@ namespace RLPayment.Business.RLCZ
                     ret = 0;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
             }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using Landi.FrameWorks;
 using TerminalLib;
 using Landi.Tools;
+using Landi.FrameWorks.HardWare;
 
 namespace RLPayment.Business
 {
@@ -72,10 +73,13 @@ namespace RLPayment.Business
                     if (ResponseEntity.returnCode == "00")
                     {
                         success(step);
-                        Global.gTerminalPay.BusinessLib = String.Format("{0}.SignInService", Global.gBankCardLibName);
-                        Global.gTerminalPay.SignIn();
-                        step += 1;
-                        processing(step);
+                        //Global.gTerminalPay.BusinessLib = String.Format("{0}.SignInService", Global.gBankCardLibName);
+                        //Global.gTerminalPay.SignIn();
+                        //step += 1;
+                        //processing(step);
+
+                        step = 3;
+                        readyTime = 0;
                     }
                     else
                     {
@@ -160,6 +164,9 @@ namespace RLPayment.Business
                 Log.Info("×¢²á³É¹¦");
                 GlobalAppData.GetInstance().AppFirst = false;
             }
+
+            ReceiptPrinter.AddedToManager();
+
         }
 
         public void OnTimeTick(int count)

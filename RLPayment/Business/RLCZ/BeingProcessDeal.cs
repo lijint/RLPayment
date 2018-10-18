@@ -11,24 +11,24 @@ namespace RLPayment.Business.RLCZ
 {
     class BeingProcessDeal: FrameActivity
     {
-        //private RLCZEntity _entity;
-        //protected override void OnEnter()
-        //{
-        //    base.OnEnter();
-        //    try
-        //    {
-        //        _entity = GetBusinessEntity() as RLCZEntity;
-        //        if (BeingProcess() != 0)
-        //        {
-        //            ShowMessageAndGoBack("交易出错|请返回！");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
-        //    }
+        private RLCZEntity _entity;
+        protected override void OnEnter()
+        {
+            base.OnEnter();
+            try
+            {
+                _entity = GetBusinessEntity() as RLCZEntity;
+                //if (BeingProcess() != 0)
+                //{
+                //    ShowMessageAndGoBack("交易出错|请返回！");
+                //}
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
+            }
 
-        //}
+        }
         //private int BeingProcess()
         //{
         //    int ret = -1;
@@ -45,8 +45,13 @@ namespace RLPayment.Business.RLCZ
             {
                 if (ResponseEntity.returnCode == "00")
                 {
+                    _entity.OrderNumber = _entity.gTerminalNo + DateTime.Now.Year + ResponseEntity.TransDate + ResponseEntity.TransTime + _entity.gTraceNo + (new Random()).Next(1000, 10000).ToString();
+                    _entity.bBankBackTransDateTime = DateTime.Now.Year + ResponseEntity.TransDate + ResponseEntity.TransTime;
+                    _entity.bHostSerialNumber = ResponseEntity.HostSerialNumber;
                     //交易成功
-                    StartActivity("热力充值通用成功");
+                    StartActivity("热力充值正在前置通信");
+
+                    //StartActivity("热力充值通用成功");
                 }
                 else if(ResponseEntity.returnCode == "82")
                 {

@@ -106,9 +106,13 @@
     <Compile Include="Business\EjectCardDeal.cs" />
     <Compile Include="Business\InitializeDeal.cs" />
     <Compile Include="Business\MainPageDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingBackDeal.cs" />
     <Compile Include="Business\RLCZ\BeingCspospTransDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingNoticeDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingPrintDeal.cs" />
     <Compile Include="Business\RLCZ\BeingProcessDeal.cs" />
     <Compile Include="Business\RLCZ\BeingQueryDeal.cs" />
+    <Compile Include="Business\RLCZ\BeingQueryQRCodeDeal.cs" />
     <Compile Include="Business\RLCZ\ChoosePayTypeDeal.cs" />
     <Compile Include="Business\RLCZ\CommonErrorDeal.cs" />
     <Compile Include="Business\RLCZ\CommonSuccessDeal.cs" />

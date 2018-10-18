@@ -36,7 +36,9 @@ namespace RLPayment.Business.RLCZ
         private void YHKClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 0;
-            StartActivity("热力充值正在前置通信");
+            StartActivity("热力充值插入银行卡");
+
+            //StartActivity("热力充值正在前置通信");
         }
         /// <summary>
         /// 微信支付
@@ -46,9 +48,9 @@ namespace RLPayment.Business.RLCZ
         private void WXClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 1;
-            StartActivity("热力充值正在前置通信");
+            //StartActivity("热力充值正在前置通信");
 
-            //StartActivity("热力充值正在查询二维码");
+            StartActivity("热力充值正在查询二维码");
         }
         /// <summary>
         /// 支付宝支付
@@ -58,9 +60,9 @@ namespace RLPayment.Business.RLCZ
         private void ZFBClick(object sender, HtmlElementEventArgs e)
         {
             _entity.PayType = 2;
-            StartActivity("热力充值正在前置通信");
+            //StartActivity("热力充值正在前置通信");
 
-            //StartActivity("热力充值正在查询二维码");
+            StartActivity("热力充值正在查询二维码");
         }
 
 

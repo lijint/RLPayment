@@ -49,6 +49,8 @@ namespace RLPayment.Entity
         public string gTerminalNo;      //终端号
         public string gBatchNo;         //批次号
         public string gTraceNo;         //流水号
+        public string bBankBackTransDateTime;       //银行返回交易时间
+        public string bHostSerialNumber;            //系统参考号
 
         public bool UseICCard
         {
@@ -86,7 +88,7 @@ namespace RLPayment.Entity
         public double TotalArrears;     //欠费总额
         public List<UserInfo> userInfoList = new List<UserInfo>();       //欠费明细
         #endregion
-        
+
 
         #region 载入配置
         /// <summary>
