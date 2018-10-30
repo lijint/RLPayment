@@ -53,24 +53,24 @@ namespace Landi.FrameWorks.HardWare
         /// 打开端口
         /// </summary>
         /// <returns></returns>
-        //public static Status Open()
-        //{
-        //    if (!IsUse) return Status.SUCC;
-        //    try
-        //    {
-        //        Status ret = (Status)Epson532OpenPrinter(Port, Bps);
-        //        if (ret != Status.SUCC)
-        //        {
-        //            Log.Warn("[ReceiptPrinter][Open]" + ret.ToString());
-        //        }
-        //        return ret;
-        //    }
-        //    catch (System.Exception e)
-        //    {
-        //        Log.Error("[ReceiptPrinter][Open]Error!\n" + e.ToString());
-        //        return Status.FAIL;
-        //    }
-        //}
+        public static Status OpenPrint()
+        {
+            if (!IsUse) return Status.SUCC;
+            try
+            {
+                Status ret = (Status)Epson532OpenPrinter(Port, Bps);
+                if (ret != Status.SUCC)
+                {
+                    Log.Warn("[ReceiptPrinter][Open]" + ret.ToString());
+                }
+                return ret;
+            }
+            catch (System.Exception e)
+            {
+                Log.Error("[ReceiptPrinter][Open]Error!\n" + e.ToString());
+                return Status.FAIL;
+            }
+        }
 
         /// <summary>
         /// 打印
@@ -95,6 +95,7 @@ namespace Landi.FrameWorks.HardWare
                     Log.Warn("打印机故障!ret=" + ret.ToString());
                     return ret;
                 }
+
                 foreach (string msInfo in lsMsg)
                 {
                     Log.Debug("PrintString:" + msInfo);
@@ -246,29 +247,30 @@ namespace Landi.FrameWorks.HardWare
         /// 关闭打印机
         /// </summary>
         /// <returns>打印机状态</returns>
-        //public static Status Close()
-        //{
-        //    if (!IsUse) return Status.SUCC;
-        //    try
-        //    {
-        //        Status ret = (Status)Epson532CloseCom();
-        //        if (ret != Status.SUCC)
-        //        {
-        //            Log.Warn("[ReceiptPrinter][Close]" + ret.ToString());
-        //        }
-        //        return ret;
-        //    }
-        //    catch (System.Exception e)
-        //    {
-        //        Log.Error("[ReceiptPrinter][Close]Error!\n" + e.ToString());
-        //        return Status.FAIL;
-        //    }
-        //}
+        public static Status ClosePrint()
+        {
+            if (!IsUse) return Status.SUCC;
+            try
+            {
+                Status ret = (Status)Epson532CloseCom();
+                if (ret != Status.SUCC)
+                {
+                    Log.Warn("[ReceiptPrinter][Close]" + ret.ToString());
+                }
+                return ret;
+            }
+            catch (System.Exception e)
+            {
+                Log.Error("[ReceiptPrinter][Close]Error!\n" + e.ToString());
+                return Status.FAIL;
+            }
+        }
 
         #region IManagedHardware
         public object Open()
         {
             if (!IsUse) return Status.SUCC;
+            Log.Info("open receiptPrinter isuse:"+IsUse);
             Status ret = (Status)Epson532OpenPrinter(Port, Bps);
             if (ret != Status.SUCC)
             {

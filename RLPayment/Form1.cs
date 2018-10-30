@@ -25,6 +25,7 @@ namespace RLPayment
             m_check = false;
             m_timer = new System.Timers.Timer();
             m_timer.Interval = 1000;
+            Cursor.Hide();
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(m_timer_Elapsed);
             Global.gTerminalPay = new TerminalPay();
             if (GlobalAppData.GetInstance().EudemonSwitch)

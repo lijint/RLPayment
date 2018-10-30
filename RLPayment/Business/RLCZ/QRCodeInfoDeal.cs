@@ -82,7 +82,7 @@ namespace RLPayment.Business.RLCZ
             {
                 if (ResponseEntity.returnCode == "00")
                 {
-                    _entity.bBankBackTransDateTime = DateTime.Now.Year + ResponseEntity.TransDate + ResponseEntity.TransTime;
+                    _entity.bBankBackTransDateTime = _entity.OrderNumber.Substring(8, 14);
                     _entity.bHostSerialNumber = ResponseEntity.HostSerialNumber;
                     //交易成功
                     StartActivity("热力充值正在前置通信");

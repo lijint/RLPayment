@@ -1,4 +1,5 @@
 ﻿using Landi.FrameWorks;
+using RLPayment.Entity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +10,12 @@ namespace RLPayment.Business.RLCZ
 {
     class BeingPrintDeal : PrinterActivity
     {
+        private RLCZEntity _entity;
         protected override void OnEnter()
         {
             base.OnEnter();
+            _entity = GetBusinessEntity() as RLCZEntity;
+            GetElementById("Message1").InnerHtml = "正在打印，请稍后... ...";
             PrintReceipt(GetTransferReceipt());
         }
 
@@ -25,16 +29,44 @@ namespace RLPayment.Business.RLCZ
             string sPadLeft = ("").PadLeft(iLeftLength, ' ');
             Lprint.Add("  " + sPadLeft + sTitle);
             Lprint.Add("  ");
-            Lprint.Add(" 交易类型 :  缴费");
-            Lprint.Add(" 支付帐号 : " + Utility.GetPrintCardNo(CommonData.BankCardNum));
+            switch(_entity.PayType)
+            {
+                case 0:
+                    Lprint.Add(" 交易方式 : 银行卡");
+                    Lprint.Add(" 支付帐号 : " + Utility.GetPrintCardNo(CommonData.BankCardNum));
+                    break;
+                case 1:
+                    Lprint.Add(" 交易方式 : 微信");
+                    break;
+                case 2:
+                    Lprint.Add(" 交易方式 : 支付宝");
+                    break;
+            }
+            //Lprint.Add(" 支付帐号 : " + Utility.GetPrintCardNo(CommonData.BankCardNum));
 
             Lprint.Add(" 日期/时间: " + System.DateTime.Now.ToString("yyyy") + "/" + System.DateTime.Now.ToString("MM") + "/" + System.DateTime.Now.ToString("dd") + "  " + System.DateTime.Now.ToString("HH") + ":" + System.DateTime.Now.ToString("mm") + ":" + System.DateTime.Now.ToString("ss"));
+
+            Lprint.Add(" 用户卡号 : " + _entity.CardNO.Trim());
+            Lprint.Add(" 用户姓名 : " + _entity.UserName.Trim());
+            Lprint.Add(" 地   址 : " + _entity.Addr.Trim());
             Lprint.Add(" ----------------------------------");
             Lprint.Add(" " + sPadLeft + "缴费明细");
-            Lprint.Add(" 缴费金额 : " + CommonData.Amount);
+            foreach (UserInfo ui in _entity.userInfoList)
+            {
+                Lprint.Add(" 费用类别 : " + ui.FeeType.Trim());
+                Lprint.Add(" 采 暖 期 : " + ui.HeatingPeriod.Trim());
+                Lprint.Add(" 面   积 : " + ui.Area + "m²");
+                Lprint.Add(" 应收金额 : " + ui.ReceivableAmount + "元");
+            }
             Lprint.Add("   ");
             Lprint.Add("   ");
-            Lprint.Add(" " + sPadLeft + "*** 中国兴业银行 ***");
+            if(_entity.CompanyCode=="01")
+                Lprint.Add("     " + "*** 济宁新东供热有限责任公司 ***");
+            else if(_entity.CompanyCode=="02")
+                Lprint.Add("   " + "*** 济宁高新公用事业发展股份有限公司 ***");
+
+            Lprint.Add(" " + sPadLeft + "***      中国兴业银行      ***");
+            Lprint.Add(" " + sPadLeft + "***        通联支付       ***");
             //Lprint.Add(" " + sPadLeft + " 客服电话: 023-63086110");
             Lprint.Add("   ");
             Lprint.Add("   ");

@@ -41,7 +41,7 @@ namespace RLPayment.Business.RLCZ
                 }
                 GetElementById("TotalArrears").InnerHtml = _entity.TotalArrears.ToString();
                 Amount = _entity.TotalArrears.ToString();
-                Amount = "0.01";
+                //Amount = "0.01";
                 CurrentPage = 1;
                 TotalPage = _entity.userInfoList.Count % MaxRow != 0 ? _entity.userInfoList.Count / MaxRow + 1 : _entity.userInfoList.Count / MaxRow;
                 if (TotalPage > 1)

@@ -23,6 +23,7 @@ namespace RLPayment.Business.RLCZ
                 IsConDisplay(true);
                 
                 GetElementById("ok").Click += new HtmlElementEventHandler(OKClick);
+                GetElementById("nums").Focus();
             }
             catch(Exception ex)
             {

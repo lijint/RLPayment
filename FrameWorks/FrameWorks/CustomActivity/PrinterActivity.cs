@@ -67,12 +67,21 @@ namespace Landi.FrameWorks
 
         protected virtual Result OnPrintReceipt(ArrayList content)
         {
+            ReceiptPrinter.Status ret = ReceiptPrinter.OpenPrint();
+            if (ret != ReceiptPrinter.Status.SUCC && ret != ReceiptPrinter.Status.PAPER_FEW)
+            {
+                Log.Warn("打开打印机故障!ret=" + ret.ToString());
+                return Result.Fail;
+            }
+
             ReceiptPrinter.SetPrintPosition(0);
-            ReceiptPrinter.Status ret = ReceiptPrinter.PrintString(content);
+            ret = ReceiptPrinter.PrintString(content);
             if (ret == ReceiptPrinter.Status.SUCC || ret == ReceiptPrinter.Status.PAPER_FEW)
             {
                 ReceiptPrinter.FeedLine(8);
                 ReceiptPrinter.CutPage();
+                ReceiptPrinter.ClosePrint();
+
                 if (ret == ReceiptPrinter.Status.SUCC)
                     return Result.Success;
                 else

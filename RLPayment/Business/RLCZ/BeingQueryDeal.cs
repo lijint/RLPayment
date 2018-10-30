@@ -3,6 +3,7 @@ using RLPayment.Entity;
 using RLPayment.Package;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using static Landi.FrameWorks.Package.Other.SocketCommunicate;
@@ -12,20 +13,18 @@ namespace RLPayment.Business.RLCZ
     class BeingQueryDeal : FrameActivity
     {
         private RLCZEntity _entity;
+        private TransResult result;
         protected override void OnEnter()
         {
             base.OnEnter();
             try
             {
                 _entity = GetBusinessEntity() as RLCZEntity;
-                if (querymsg() == 0)
-                {
-                    StartActivity("热力充值查询结果");
-                }
-                else
-                {
-                    ShowMessageAndGoBack("查询出错|" + _entity.ReturnCode + _entity.ReturnMsg);
-                }
+                result = TransResult.E_INVALID;
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += querymsg;
+                bw.RunWorkerAsync();
+                bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             }
             catch(Exception ex)
             {
@@ -33,24 +32,32 @@ namespace RLPayment.Business.RLCZ
             }
         }
 
-        private int querymsg()
+        private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            int ret = -1;
+            if (result == TransResult.E_SUCC)
+            {
+                StartActivity("热力充值查询结果");
+            }
+            else
+            {
+                ShowMessageAndGoBack("查询出错|" + _entity.ReturnCode + _entity.ReturnMsg);
+            }
+
+        }
+
+        private void querymsg(object sender, DoWorkEventArgs e)
+        {
             try
             {
                 CRLQueryTrans cSPospTrans = new CRLQueryTrans(_entity);
                 cSPospTrans.setIPAndPort(_entity.RLServerIP, _entity.RLServerPort);
-                TransResult result = cSPospTrans.transact();
-                if (result == TransResult.E_SUCC)
-                {
-                    ret = 0;
-                }
+                result = cSPospTrans.transact();
             }
             catch(Exception ex)
             {
                 Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
             }
-            return ret;
+            return;
         }
 
     }

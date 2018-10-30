@@ -21,6 +21,76 @@ namespace RLPayment.Package
             TransCode = "02";
         }
 
+        public string GetPacket()
+        {
+            _entity.HOTBILLTYPE = "电子凭证";
+            _entity.HOTBILLNO = _entity.OrderNumber;
+            if (_entity.PayType == 0)
+            {
+                _entity.HOTPAYTYPE = "网上银行";
+            }
+            else if (_entity.PayType == 1)
+            {
+                _entity.HOTPAYTYPE = "微信";
+            }
+            else if (_entity.PayType == 2)
+            {
+                _entity.HOTPAYTYPE = "支付宝";
+            }
+
+            SendPackage = "";
+            SendPackage += TransCode;
+            SendPackage += "07";
+            //SendPackage += _entity.BANKCODE.PadLeft(2, ' ');
+            SendPackage += _entity.BUSSINESSCODE.PadLeft(8, ' ');
+            SendPackage += _entity.GUICODE.PadLeft(16, ' ');
+            SendPackage += _entity.CardNO.PadLeft(10, ' ');
+            SendPackage += "".PadLeft(16 - GetLength(_entity.HOTBILLTYPE), ' ') + _entity.HOTBILLTYPE;
+            SendPackage += _entity.HOTBILLNO.PadLeft(32, ' ');
+            SendPackage += _entity.OrderNumber.PadLeft(32, ' ');
+            SendPackage += "".PadLeft(16 - GetLength(_entity.HOTPAYTYPE), ' ') + _entity.HOTPAYTYPE;
+            SendPackage += string.Format("{0:F2}", _entity.Amount).PadLeft(11, '0');
+            SendPackage += _entity.bBankBackTransDateTime;
+            if (SendPackage == null)
+                return null;
+            string sendlen = Convert.ToString(GetLength(SendPackage), 16).PadLeft(4, '0');
+            string sendallstr = sendlen + SendPackage;
+            //return sendallstr;
+            Log.Info("sendallstr111 : " + sendallstr);
+            byte[] bsendall = Encoding.GetEncoding("GBK").GetBytes(sendallstr);
+            return Utility.bcd2str(bsendall, bsendall.Length);
+        }
+
+        public bool getUnpacket(string recv)
+        {
+            if (string.IsNullOrEmpty(recv))
+                return false;
+            byte[] bRecv = Utility.str2Bcd(recv);
+
+            int len = UnPacketHead(bRecv);
+            string recvstrall = Encoding.GetEncoding("GBK").GetString(bRecv);
+            recvstrall = recvstrall.Substring(4);
+            bool ret = false;
+            if (string.IsNullOrEmpty(recvstrall))
+                return ret;
+            try
+            {
+                _entity.ReturnCode = recvstrall.Substring(0, 2);
+                if (_entity.ReturnCode != "00")
+                {
+                    _entity.ReturnMsg = _entity.GetReturnMsg(_entity.ReturnCode);
+                    return ret;
+                }
+                ret = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[" + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name + "][" + System.Reflection.MethodBase.GetCurrentMethod().Name + "] err" + ex);
+            }
+            return ret;
+
+        }
+
         protected override byte[] Packet()
         {
             _entity.HOTBILLTYPE = "电子凭证";
@@ -82,8 +152,9 @@ namespace RLPayment.Package
         protected override byte[] PacketHead(byte[] SendBytes)
         {
             string sendStr = Encoding.GetEncoding("GBK").GetString(SendBytes);
-            string sendlen = Convert.ToString(sendStr.Length, 16).PadLeft(4, '0');
+            string sendlen = Convert.ToString(GetLength(sendStr), 16).PadLeft(4, '0');
             string sendallstr = sendlen + sendStr;
+            Log.Info("sendallstr : " + sendallstr);
             return Encoding.GetEncoding("GBK").GetBytes(sendallstr);
 
             //int headLength = HeadLength;

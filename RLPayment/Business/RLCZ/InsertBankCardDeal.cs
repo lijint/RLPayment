@@ -23,7 +23,7 @@ namespace RLPayment.Business.RLCZ
 
                 /// 消费金额
                 request.Amount = _entity.Amount;
-
+                CommonData.Amount = _entity.Amount;
                 Global.gTerminalPay.BusinessLib = String.Format("{0}.PayService", Global.gBankCardLibName);
                 Global.gTerminalPay.RequestEntity = request;
                 Global.gTerminalPay.Pay(request);

@@ -24,8 +24,22 @@ namespace RLPayment.Package
             if (entity != null)
                 _entity = entity;
             HeadLength = 4;
-        }
 
+            _entity.HOTBILLTYPE = "电子凭证";
+            _entity.HOTBILLNO = _entity.OrderNumber;
+            if (_entity.PayType == 0)
+            {
+                _entity.HOTPAYTYPE = "网上银行";
+            }
+            else if (_entity.PayType == 1)
+            {
+                _entity.HOTPAYTYPE = "微信";
+            }
+            else if (_entity.PayType == 2)
+            {
+                _entity.HOTPAYTYPE = "支付宝";
+            }
+        }
         protected override byte[] Packet()
         {
             PacketData packetData = new PacketData();
@@ -34,7 +48,7 @@ namespace RLPayment.Package
             packetData.msgsender = "TERMINAL";
             packetData.msgrecv = "POSP";
             packetData.imei = _entity.gTerminalNo;
-            packetData.transno = _entity.PayTraceNo;
+            packetData.transno = _entity.gTraceNo;
             packetData.transtype = "101";
             packetData.transdate = DateTime.Now.ToString("yyyyMMdd");
             packetData.transtime = DateTime.Now.ToString("hhmmss");
@@ -51,13 +65,21 @@ namespace RLPayment.Package
 
         }
 
+        private string getNoticePacket()
+        {
+            CNoticeTrans cNotice = new CNoticeTrans(_entity);
+            return cNotice.GetPacket();
+        }
+
         private string packetAdditiondata()
         {
             string retAdditionStr = "";
             Postdata postdata = new Postdata();
 
+            postdata.POSTDATA = getNoticePacket();
+
             postdata.ADDITIONDATA.BANKCARDNO = CommonData.BankCardNum;
-            postdata.ADDITIONDATA.AMOUNT = CommonData.Amount.ToString();
+            postdata.ADDITIONDATA.AMOUNT = _entity.Amount.ToString();
             postdata.ADDITIONDATA.TRANSDATE = _entity.bBankBackTransDateTime;
             postdata.ADDITIONDATA.FLOWNO = _entity.gTraceNo;
             postdata.ADDITIONDATA.BATCHNO = _entity.gBatchNo;
@@ -68,7 +90,7 @@ namespace RLPayment.Package
 
             postdata.ADDITIONDATA.HOTBILLTYPE = _entity.HOTBILLTYPE;
             postdata.ADDITIONDATA.HOTBILLNO = _entity.HOTBILLNO;
-            postdata.ADDITIONDATA.HOTUSERID = _entity.HOTUSERID;
+            postdata.ADDITIONDATA.HOTUSERID = _entity.CardNO;             //取消用户编号
             postdata.ADDITIONDATA.HOTFLOWNO = _entity.OrderNumber;
             postdata.ADDITIONDATA.HOTPAYTYPE = _entity.HOTPAYTYPE;
             postdata.ADDITIONDATA.BANKCODE = _entity.BANKCODE;
@@ -98,20 +120,24 @@ namespace RLPayment.Package
             {
                 if (string.IsNullOrEmpty(RecvPackage))
                     return false;
-                PacketData packetData = new PacketData();
-                packetData = JsonConvert.DeserializeObject<PacketData>(RecvPackage);
+                RecvPacketData packetData = new RecvPacketData();
+                packetData = JsonConvert.DeserializeObject<RecvPacketData>(RecvPackage);
                 respcode = packetData.respcode;
                 respmsg = packetData.respmsg;
                 if (respcode == "00")
                 {
-                    Postdata postdata = new Postdata();
-                    postdata = JsonConvert.DeserializeObject<Postdata>(packetData.postdata);
-                    RETURNCODE = postdata.ADDITIONDATA.RETURNCODE;
-                    MESSAGE = postdata.ADDITIONDATA.MESSAGE;
-                    if (postdata.ADDITIONDATA.RETURNCODE == "00")
-                        return true;
-                    else
-                        return false;
+                    CNoticeTrans cNotice = new CNoticeTrans(_entity);
+                    return cNotice.getUnpacket(packetData.postdata);
+                    //RecvPostdata postdata = new RecvPostdata();
+                    //postdata = JsonConvert.DeserializeObject<RecvPostdata>(packetData.postdata);
+                    //RETURNCODE = postdata.ADDITIONDATA.RETURNCODE;
+                    //MESSAGE = postdata.ADDITIONDATA.MESSAGE;
+                    //if (postdata.ADDITIONDATA.RETURNCODE == "00")
+
+                    //return true;
+
+                    //else
+                    //    return false;
                 }
                 else
                 {
@@ -148,7 +174,7 @@ namespace RLPayment.Package
             int recvPacketLength = 0;
             for (int i = 0; i < HeadLength; i++)
             {
-                recvPacketLength += HeadLength * 256 + recHead[i];
+                recvPacketLength = recvPacketLength * 256 + recHead[i];
             }
             Log.Info("recv packet len : " + recvPacketLength);
             return recvPacketLength;
@@ -166,15 +192,38 @@ namespace RLPayment.Package
         public string transdate;        // String(8)  Y Y   YYYYMMDD           交易日期
         public string transtime;        // String(6)  Y Y   hhmmss             交易时间
         public string guidcode;         // String(32) Y Y   应答时需要重新生成     随机字符串
-        public string requestkey;       // String(32)       上送的内容原样返回     请求方保留域
+        //public string requestkey;       // String(32)       上送的内容原样返回     请求方保留域
         public string encrypttype;      // String(6)  Y     0-不加密            加密方式
         public int postlength;          // Int        Y     源字符串长度         加密长度
-        public string postdata;         // String Y         加密内容           
+        public string postdata;         // String     Y     加密内容           
+        public string macvalue;         // String(16) Y Y   mac校验值         
+        //public string respcode;         // String(6)    Y   应答码            
+        //public string respmsg;          // String(128)  Y   应答描述           
+        //public string ip;               // String(32) C     第三方通信地址        目的IP地址 
+        //public int port;                // Int        C                        目的端口号
+    }
+
+    public class RecvPacketData
+    {
+        public string version;          // String     Y Y   1.0.0              版本号
+        public string msgsender;        // String(10) Y Y   TERMINAL/TPOS/POSP 发送方
+        public string msgrecv;          // String(10) Y Y   TERMINAL/TPOS/POSP 接收方
+        public string imei;             // String(32) Y     终端号              设备唯一标识
+        public string transno;          // String(6)  Y Y	6位自增数           交易流水号
+        public string transtype;        // String(16) Y Y   交易类型           
+        public string transdate;        // String(8)  Y Y   YYYYMMDD           交易日期
+        public string transtime;        // String(6)  Y Y   hhmmss             交易时间
+        public string guidcode;         // String(32) Y Y   应答时需要重新生成     随机字符串
+        //public string requestkey;       // String(32)       上送的内容原样返回     请求方保留域
+        public string encrypttype;      // String(6)  Y     0-不加密            加密方式
+        public int postlength;          // Int        Y     源字符串长度         加密长度
+        public string postdata;         // String     Y     加密内容           
         public string macvalue;         // String(16) Y Y   mac校验值         
         public string respcode;         // String(6)    Y   应答码            
         public string respmsg;          // String(128)  Y   应答描述           
         public string ip;               // String(32) C     第三方通信地址        目的IP地址 
         public int port;                // Int        C                        目的端口号
+
     }
     public class Postdata
     {
@@ -185,7 +234,43 @@ namespace RLPayment.Package
         public string POSTDATA;
         public AddData ADDITIONDATA;
     }
+
+    public class RecvPostdata
+    {
+        public RecvPostdata()
+        {
+            ADDITIONDATA = new RecvAddData();
+        }
+        public string POSTDATA;
+        public RecvAddData ADDITIONDATA;
+    }
+
     public class AddData
+    {
+        public string BANKCARDNO;       //交易卡号
+        public string AMOUNT;           //交易金额（单位 元）
+        public string TRANSDATE;        //交易日期(yyyyMMddHHmmss)
+        public string FLOWNO;           //终端流水号
+        public string BATCHNO;          //终端批次号
+        public string BANKTERMINALNO;   //银行终端号
+        public string BANKBRANCHNO;     //银行商户号
+        public string BANKREFNO;        //银行系统参考号
+        public string MEMO;             //备注
+        public string HOTBILLTYPE;      //热力票据类别
+        public string HOTBILLNO;        //热力票据号
+        public string HOTUSERID;        //热力用户编码
+        public string HOTFLOWNO;        //热力流水号
+        public string HOTPAYTYPE;       //热力付款类型
+        public string BANKCODE;         //银行代码
+        public string BUSSINESSCODE;    //营业区码
+        public string GUICODE;          //柜员号
+        public string ORDERNO;          //威富通订单号
+        public string PAYTYPE;          //1、通联，2威富通
+        //public string RETURNCODE;       //前置处理响应结果
+        //public string MESSAGE;          //处理结果说明
+
+    }
+    public class RecvAddData
     {
         public string BANKCARDNO;       //交易卡号
         public string AMOUNT;           //交易金额（单位 元）
@@ -210,6 +295,7 @@ namespace RLPayment.Package
         public string MESSAGE;          //处理结果说明
 
     }
+
 
     enum ReturnCode
     {

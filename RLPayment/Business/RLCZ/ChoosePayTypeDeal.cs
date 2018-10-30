@@ -21,6 +21,8 @@ namespace RLPayment.Business.RLCZ
                 GetElementById("btnYHK").Click += new HtmlElementEventHandler(YHKClick);
                 GetElementById("btnWX").Click += new HtmlElementEventHandler(WXClick);
                 GetElementById("btnZFB").Click += new HtmlElementEventHandler(ZFBClick);
+                GetElementById("amount").InnerHtml = String.Format("{0:F}", _entity.Amount);
+
             }
             catch (Exception ex)
             {
@@ -63,6 +65,7 @@ namespace RLPayment.Business.RLCZ
             //StartActivity("热力充值正在前置通信");
 
             StartActivity("热力充值正在查询二维码");
+            //StartActivity("热力充值正在打印");
         }
 
 

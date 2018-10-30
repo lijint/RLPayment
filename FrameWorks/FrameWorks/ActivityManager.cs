@@ -148,6 +148,9 @@ namespace Landi.FrameWorks
             mWebBrowser.ScriptErrorsSuppressed = true;
             mWebBrowser.AllowNavigation = true;
             mWebBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(mWebBrowser_DocumentCompleted);
+            
+            //解决初始化界面未添加Content时主界面按Backspace，程序跑飞的情况
+            mWebBrowser.Navigating += mWebBrowser_Navigating;
 
             Thread.CurrentThread.Name = "UIThread";
 
@@ -168,6 +171,12 @@ namespace Landi.FrameWorks
             onBeforeStart();
             mMonitorTimer.Start();
             SendMessage(ActivityManagerHandler.LAUNCH_ACTIVITY, new Intent(mApplicationInfo.FirstActivity));
+        }
+
+        private void mWebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (mPendingIntent == null)
+                e.Cancel = true;
         }
 
         private void AdManager_LeaveAd()
