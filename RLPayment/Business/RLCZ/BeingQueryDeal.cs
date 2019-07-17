@@ -36,6 +36,29 @@ namespace RLPayment.Business.RLCZ
         {
             if (result == TransResult.E_SUCC)
             {
+                if (_entity.CompanyCode == "01")
+                {
+                    //01-济宁新东供热有限责任公司 821370849000006
+                    if (_entity.gBranchNo!= "821370849000006")
+                    {
+                        ShowMessageAndGoBack("查询出错|非本公司用户");
+                        return;
+                    }
+                }
+                else if (_entity.CompanyCode == "02")
+                {
+                    //02-济宁高新公用事业发展股份有限公司 821370849000005
+                    if (_entity.gBranchNo != "821370849000005")
+                    {
+                        ShowMessageAndGoBack("查询出错|非本公司用户");
+                        return;
+                    }
+                }
+                else
+                {
+                    ShowMessageAndGoBack("查询出错|返回公司类型错误" + _entity.CompanyCode);
+                    return;
+                }
                 StartActivity("热力充值查询结果");
             }
             else
